@@ -1,0 +1,8 @@
+<resources>
+    <string name="app_name">MyAtm</string>
+    <string name="account">Account: </string>
+    <string name="money_in_hand">Money in hand: </string>
+    <string name="deposit">Deposit</string>
+    <string name="withdraw">Withdraw</string>
+    <string name="change_value">Change</string>
+</resources>
