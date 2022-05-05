@@ -12,7 +12,6 @@ import com.example.myatm.entities.Withdraw;
 
 public class MainActivity extends AppCompatActivity {
     private Account account;
-    private Withdraw withdraw;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
