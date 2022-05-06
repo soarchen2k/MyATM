@@ -5,5 +5,5 @@
     <string name="money_in_hand"> 现金: </string>
     <string name="deposit">存钱</string>
     <string name="withdraw">取钱</string>
-    <string name="change_value">改变额度</string>
+    <string name="change_value">改变额度:</string>
 </resources>

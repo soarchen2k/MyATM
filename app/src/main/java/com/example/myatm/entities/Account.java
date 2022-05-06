@@ -1,13 +1,16 @@
 package com.example.myatm.entities;
 
+import java.util.Arrays;
+import java.util.List;
+
 public class Account {
     private Integer balance;
-    private Integer amount;
+    private static final List<Integer> AMOUNTS = Arrays.asList(50, 100, 200, 500, 1000);
     private Integer moneyInHand;
+    private Integer currentAmount;
 
     public Account() {
-        this.balance = 3000;
-        this.amount = 1000;
+        this.balance = 5000;
         this.moneyInHand = 0;
     }
 
@@ -19,12 +22,8 @@ public class Account {
         this.balance = balance;
     }
 
-    public Integer getAmount() {
-        return amount;
-    }
-
-    public void setAmount(Integer amount) {
-        this.amount = amount;
+    public List<Integer> getAmounts() {
+        return AMOUNTS;
     }
 
     public Integer getMoneyInHand() {
@@ -35,17 +34,11 @@ public class Account {
         this.moneyInHand = moneyInHand;
     }
 
-    public void changeAmount() {
-        switch (getAmount()) {
-            case 1000:
-                setAmount(200);
-                break;
-            case 200:
-                setAmount(500);
-                break;
-            case 500:
-                setAmount(1000);
-                break;
-        }
+    public Integer getCurrentAmount() {
+        return currentAmount;
+    }
+
+    public void setCurrentAmount(Integer currentAmount) {
+        this.currentAmount = currentAmount;
     }
 }

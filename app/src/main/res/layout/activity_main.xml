@@ -74,26 +74,26 @@
         app:layout_constraintStart_toEndOf="@+id/deposit_button"
         app:layout_constraintTop_toBottomOf="@+id/inhandmoney_view" />
 
-    <Button
-        android:id="@+id/change_value_button"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+    <Spinner
+        android:id="@+id/spinner"
+        android:layout_width="0dp"
+        android:layout_height="24dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="32dp"
+        android:layout_marginEnd="48dp"
+        android:entries="@array/spinnerclass"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/textView4"
+        app:layout_constraintTop_toBottomOf="@+id/withdrar_button" />
+
+    <TextView
+        android:id="@+id/textView4"
+        android:layout_width="0dp"
+        android:layout_height="24dp"
         android:layout_marginStart="68dp"
         android:layout_marginTop="32dp"
-        android:onClick="onChangeAmount"
         android:text="@string/change_value"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/deposit_button" />
 
-    <TextView
-        android:id="@+id/change_view"
-        android:layout_width="0dp"
-        android:layout_height="26dp"
-        android:layout_marginStart="16dp"
-        android:layout_marginTop="44dp"
-        android:layout_marginEnd="32dp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.551"
-        app:layout_constraintStart_toEndOf="@+id/change_value_button"
-        app:layout_constraintTop_toBottomOf="@+id/withdrar_button" />
 </androidx.constraintlayout.widget.ConstraintLayout>
