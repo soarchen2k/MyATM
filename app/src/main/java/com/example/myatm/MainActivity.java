@@ -2,6 +2,8 @@ package com.example.myatm;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.Context;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.AdapterView;
@@ -19,28 +21,43 @@ import java.util.List;
 public class MainActivity extends AppCompatActivity {
     private Account account;
     private final List<String> amountsList = new ArrayList<>();
+    private SharedPreferences.Editor editor;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        SharedPreferences sp= getSharedPreferences("SP",Context.MODE_PRIVATE);
+        editor = sp.edit();
+
         account = new Account();
-        initSpinner();
+        initSpinner(sp);
         changeBalanceView();
     }
 
-    private void initSpinner() {
-        for (Integer in : account.getAmounts()) {
-            amountsList.add(String.valueOf(in));
+    private void initSpinner(SharedPreferences sp) {
+        if (amountsList.isEmpty()) {
+            for (Integer in : account.getAmounts()) {
+                amountsList.add(String.valueOf(in));
+            }
         }
+
         Spinner spinner = findViewById(R.id.spinner);
         ArrayAdapter<String> arrayAdapter = new ArrayAdapter<>(MainActivity.this, android.R.layout.simple_spinner_item, amountsList);
         arrayAdapter.setDropDownViewResource(android.R.layout.simple_spinner_item);
         spinner.setAdapter(arrayAdapter);
+        int defaultAmount = sp.getInt("defaultAmount", -1);
+        if (defaultAmount != -1) {
+            account.setCurrentAmount(Integer.valueOf(amountsList.get(defaultAmount)));
+        }
         spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                 account.setCurrentAmount(Integer.valueOf(amountsList.get(position)));
+                editor.putInt("defaultAmount", position);
+                boolean commit = editor.commit();
+                System.out.println(commit);
             }
 
             @Override
