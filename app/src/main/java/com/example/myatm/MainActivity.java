@@ -21,23 +21,28 @@ import java.util.List;
 public class MainActivity extends AppCompatActivity {
     private Account account;
     private final List<String> amountsList = new ArrayList<>();
+    private SharedPreferences sp;
     private SharedPreferences.Editor editor;
+    private boolean onStartUp;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        SharedPreferences sp = getSharedPreferences("SP", Context.MODE_PRIVATE);
+        sp = getSharedPreferences("SP", Context.MODE_PRIVATE);
         editor = sp.edit();
+        onStartUp = true;
 
         account = new Account();
-        initSpinner(sp);
+        initSpinner();
         changeBalanceView();
+
+        onStartUp = false;
     }
 
-    private void initSpinner(SharedPreferences sp) {
-        final boolean[] onStart = {true};
+    private void initSpinner() {
+        final boolean[] onSpinnerStartUp = {true};
         if (amountsList.isEmpty()) {
             for (Integer in : account.getAmounts()) {
                 amountsList.add(String.valueOf(in));
@@ -48,24 +53,21 @@ public class MainActivity extends AppCompatActivity {
         ArrayAdapter<String> arrayAdapter = new ArrayAdapter<>(MainActivity.this, android.R.layout.simple_spinner_item, amountsList);
         arrayAdapter.setDropDownViewResource(android.R.layout.simple_spinner_item);
         spinner.setAdapter(arrayAdapter);
-        String string = sp.getString("test", "Empty");
-        System.out.println(string);
+
         int defaultAmount = sp.getInt("defaultAmount", -1);
         spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                if (onStart[0] && defaultAmount != -1) {
+                if (onSpinnerStartUp[0] && defaultAmount != -1) {
                     account.setCurrentAmount(Integer.valueOf(amountsList.get(defaultAmount)));
-                    onStart[0] = false;
+                    spinner.setSelection(defaultAmount);
+                    onSpinnerStartUp[0] = false;
                 } else {
                     account.setCurrentAmount(Integer.valueOf(amountsList.get(position)));
                 }
-
-                editor.clear();
+                editor.remove("defaultAmount");
                 editor.putInt("defaultAmount", position);
-                editor.putString("test", "TEST2");
-                boolean commit = editor.commit();
-                System.out.println(commit);
+                editor.commit();
             }
 
             @Override
@@ -87,8 +89,22 @@ public class MainActivity extends AppCompatActivity {
 
     private void changeBalanceView() {
         TextView balance = findViewById(R.id.balance_view);
-        balance.setText(String.valueOf(account.getBalance()));
+        if (onStartUp && sp.getInt("balance", -1) != -1) {
+            balance.setText(String.valueOf(sp.getInt("balance", -1)));
+        } else {
+            balance.setText(String.valueOf(account.getBalance()));
+            editor.remove("balance");
+            editor.putInt("balance", account.getBalance());
+        }
+
         TextView moneyInHand = findViewById(R.id.inhandmoney_view);
-        moneyInHand.setText(String.valueOf(account.getMoneyInHand()));
+        if (onStartUp && sp.getInt("moneyInHand", -1) != -1) {
+            moneyInHand.setText(String.valueOf(sp.getInt("moneyInHand", -1)));
+        } else {
+            moneyInHand.setText(String.valueOf(account.getMoneyInHand()));
+            editor.remove("moneyInHand");
+            editor.putInt("moneyInHand", account.getMoneyInHand());
+        }
+        editor.commit();
     }
 }
